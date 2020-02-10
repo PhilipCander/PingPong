@@ -1,5 +1,6 @@
 import pygame
-
+import shelve
+SCORE = shelve.open("score.txt")
 pygame.init()
 SIZE = (700, 500)
 pygame.display.set_caption("Pong")

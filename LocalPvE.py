@@ -4,6 +4,48 @@ from classPaddle import Paddle
 from ball import Ball
 
 
+class Box:
+    def __init__(self, surface, text, size, rect, color, times, font=None):
+        self.screen = surface
+        self.text = text
+        self.font = font
+        self.size = size
+        self.rect = rect
+        self.times = times
+        self.color = color
+        self.list = []
+
+        self.frame_rect = []
+        self.box_rect = [0, 0, self.rect[2], self.rect[3]]
+        self.making_boxes()
+        self.frame = pygame.Surface((self.frame_rect[2], self.frame_rect[3]))
+
+    def making_boxes(self):
+        if self.times > 1:
+            self.convrect = list(self.rect)
+            for box in range(self.times):
+                print("bla")
+                box = pygame.Rect(tuple(self.box_rect))
+                self.list.append(box)
+
+                self.box_rect[1] += self.rect[3]
+
+
+                self.convrect[1] += self.rect[3]
+                self.convrect[3] += self.rect[3]
+            self.frame_rect = tuple(self.convrect)
+            print(self.frame_rect)
+        else:
+            pass
+
+    def draw(self):
+        self.screen.blit(self.frame, (self.rect[0], self.rect[1]))
+        self.frame.fill(WHITE)
+        for box in self.list:
+            self.frame.blit(self.frame, box)
+            pygame.draw.rect(self.frame, self.color, box, 5)
+
+
 class PvE:
     def __init__(self, screen):
         self.screen = screen
@@ -11,8 +53,9 @@ class PvE:
         self.running = True
         self.countdown = True
         self.end = False
+        self.timer_color = WHITE
         self.count = 4
-        self.time = 65
+        self.time = 5
         self.scoreA = 0
         self.scoreB = 0
         self.load_data()
@@ -42,6 +85,16 @@ class PvE:
         self.screen.blit(text_surface, text_rect)
 
     def load_data(self):
+        try:
+            self.score = SCORE["player"]
+        except:
+            SCORE["player"] = 0
+            self.score = SCORE["player"]
+
+
+        self.score_box = Box(self.screen, "test", 10, (100, 200, 400, 100), RED, 3)
+
+
         self.font = pygame.font.Font(None, 34)
         self.paddleA = Paddle(WHITE, 20, 100)
         self.paddleA.rect.x = 10
@@ -82,6 +135,9 @@ class PvE:
             if keys[pygame.K_s]:
                 self.paddleA.moveDown(5)
 
+        else:
+            SCORE["player"] = self.scoreA, self.scoreB
+
     def update(self):
         self.all_sprites_list.update()
         if self.ball.rect.x >= 680:
@@ -114,7 +170,7 @@ class PvE:
         self.screen.fill(DARKBLUE)
         if not self.countdown:
             self.draw_text(f"{int((self.time-self.time_remaining)/60)} : {int(self.time-self.time_remaining)%60}",
-                           None, 70, WHITE, 300, 20)
+                           None, 70, self.timer_color, 300, 20)
             if not self.end:
                 pygame.draw.line(self.screen, WHITE, [349, 80], [349, 500], 5)
         if not self.end:
@@ -124,6 +180,9 @@ class PvE:
 
         self.draw_text(f"{self.scoreA}", None, 50, WHITE, 220, 10)
         self.draw_text(f"{self.scoreB}", None, 50, WHITE, 450, 10)
+
+        if self.end:
+            self.score_box.draw()
 
         pygame.display.update()
 
@@ -144,4 +203,6 @@ class PvE:
 
             if self.time - self.time_remaining < 0:
                 self.end = True
+            if (self.time - self.time_remaining -10) <= 0:
+                self.timer_color = RED
             self.draw()
