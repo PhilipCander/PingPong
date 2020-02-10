@@ -1,4 +1,4 @@
-import pygame
+from settings import *
 from random import randint
 
 BLACK = (0, 0, 0)
@@ -18,7 +18,7 @@ class Ball(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
 
         # Draw the ball (a rectangle!)
-        pygame.draw.rect(self.image, color, [0, 0, width, height])
+        pygame.draw.circle(self.image, WHITE, (int(width/2), int(height/2)), int(width/2))
 
         self.velocity = [randint(4, 8), randint(-8, 8)]
 

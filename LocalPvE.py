@@ -9,6 +9,10 @@ class PvE:
         self.screen = screen
         self.clock = pygame.time.Clock()
         self.running = True
+        self.countdown = True
+        self.end = False
+        self.count = 4
+        self.time = 65
         self.scoreA = 0
         self.scoreB = 0
         self.load_data()
@@ -71,11 +75,12 @@ class PvE:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
-            self.paddleA.moveUp(5)
-        if keys[pygame.K_s]:
-            self.paddleA.moveDown(5)
+        if not self.end:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w]:
+                self.paddleA.moveUp(5)
+            if keys[pygame.K_s]:
+                self.paddleA.moveDown(5)
 
     def update(self):
         self.all_sprites_list.update()
@@ -107,17 +112,36 @@ class PvE:
 
     def draw(self):
         self.screen.fill(DARKBLUE)
-        pygame.draw.line(self.screen, WHITE, [349, 0], [349, 500], 5)
-        self.all_sprites_list.draw(self.screen)
+        if not self.countdown:
+            self.draw_text(f"{int((self.time-self.time_remaining)/60)} : {int(self.time-self.time_remaining)%60}",
+                           None, 70, WHITE, 300, 20)
+            if not self.end:
+                pygame.draw.line(self.screen, WHITE, [349, 80], [349, 500], 5)
+        if not self.end:
+            self.all_sprites_list.draw(self.screen)
+        if self.countdown:
+            self.draw_text(f"{int(self.count-self.seconds)} ", None, 100, WHITE, 330, 100)
 
-        self.draw_text(f"{self.scoreA}", None, 50, WHITE, 250, 10)
-        self.draw_text(f"{self.scoreB}", None, 50, WHITE, 420, 10)
+        self.draw_text(f"{self.scoreA}", None, 50, WHITE, 220, 10)
+        self.draw_text(f"{self.scoreB}", None, 50, WHITE, 450, 10)
 
         pygame.display.update()
 
     def run(self):
+        self.start_ticks = pygame.time.get_ticks()
         while self.running:
             self.dt = self.clock.tick(FPS) / 1000.0
             self.events()
-            self.update()
+            if not self.countdown and not self.end:
+
+                self.update()
+            else:
+                self.seconds=(pygame.time.get_ticks()-self.start_ticks) / 1000
+                if self.seconds >self.count:
+                    self.countdown = False
+            if not self.end:
+                self.time_remaining = (pygame.time.get_ticks() - self.start_ticks) / 1000
+
+            if self.time - self.time_remaining < 0:
+                self.end = True
             self.draw()

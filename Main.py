@@ -1,6 +1,7 @@
 from settings import *
 from LocalPvP import PvP
 from LocalPvE import PvE
+from onlinePvP import oPvP
 
 pygame.init()
 
@@ -75,6 +76,8 @@ class Game:
         self.no1 = pygame.image.load("rec/no.png")
         self.no2 = pygame.image.load("rec/no2.png")
         self.localPvP_button = Button("LocalPvP", 10, 10, RED)
+        self.localPvE_button = Button("LocalPvE", 170, 10, RED)
+        self.onlinePvP_button = Button("OnlinePvP", 330, 10, RED)
 
     def events(self):
         for event in pygame.event.get():
@@ -86,19 +89,26 @@ class Game:
         self.mouse = pygame.mouse.get_pos()
         self.click = pygame.mouse.get_pressed()
         self.test = self.localPvP_button.click((self.mouse[0], self.mouse[1]))
-        if self.test and self.click:
-            print(self.click)
-            self.localPvPrun = True
+        self.test2 = self.localPvE_button.click((self.mouse[0], self.mouse[1]))
+        self.test3 = self.onlinePvP_button.click((self.mouse[0], self.mouse[1]))
 
     def update(self):
-        """
-        Updating all sprites or checking for collides
-        """
+        if self.test and self.click[0] >= 1:
+            print(self.click)
+            self.localPvPrun = True
+        if self.test2 and self.click[0] >= 1:
+            print(self.click)
+            self.localPvErun = True
+        if self.test3 and self.click[0] >= 1:
+            print(self.click)
+            self.onlinePvPrun = True
 
     def draw(self):
         # Filling the Background
         self.screen.fill(DARKBLUE)
         self.localPvP_button.draw(self.screen)
+        self.localPvE_button.draw(self.screen)
+        self.onlinePvP_button.draw(self.screen)
         self.draw_text(f"{int(self.dt*1000.0)}", None, 25, RED, 0, 0)
         pygame.display.flip()
 
@@ -118,7 +128,11 @@ class Game:
                 if not self.game.running:
                     self.localPvErun = False
             if self.onlinePvPrun:
-                pass
+                self.game = oPvP(self.screen)
+                self.game.load_data()
+                self.game.run()
+                if not self.game.running:
+                    self.onlinePvPrun = False
 
             self.events()
             self.update()
