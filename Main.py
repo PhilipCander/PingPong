@@ -24,23 +24,29 @@ class Box:
         self.frame_rect = []
         self.box_rect = [0, 0, self.rect[2], self.rect[3]]
         self.making_boxes()
-        self.frame = pygame.Surface((self.rect[2], self.rect[3]))
+        self.frame = pygame.Surface((self.frame_rect[2], self.frame_rect[3]))
 
     def making_boxes(self):
-        for box in range(self.times):
-            box = pygame.Rect(tuple(self.box_rect))
-            self.list.append(box)
-
-            self.box_rect[1] += self.rect[3]
-
+        if self.times > 1:
             self.convrect = list(self.rect)
-            self.convrect[1] += self.rect[3]
-        self.frame_rect = tuple(self.convrect)
+            for box in range(self.times):
+                print("bla")
+                box = pygame.Rect(tuple(self.box_rect))
+                self.list.append(box)
+                self.box_rect[1] += self.rect[3]
+                self.convrect[1] += self.rect[3]
+                self.convrect[3] += self.rect[3]
+            self.frame_rect = tuple(self.convrect)
+            print(self.frame_rect)
+        else:
+            pass
 
     def draw(self):
+        self.screen.blit(self.frame, (self.rect[0], self.rect[1]))
+        self.frame.fill(WHITE)
         for box in self.list:
-            self.screen.blit(self.frame, box)
-            pygame.draw.rect(self.screen, self.color, box, 5)
+            self.frame.blit(self.frame, box)
+            pygame.draw.rect(self.frame, self.color, box, 5)
 
 
 class Button:

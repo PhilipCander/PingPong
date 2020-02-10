@@ -14,7 +14,6 @@ class Box:
         self.times = times
         self.color = color
         self.list = []
-
         self.frame_rect = []
         self.box_rect = [0, 0, self.rect[2], self.rect[3]]
         self.making_boxes()
@@ -27,10 +26,7 @@ class Box:
                 print("bla")
                 box = pygame.Rect(tuple(self.box_rect))
                 self.list.append(box)
-
                 self.box_rect[1] += self.rect[3]
-
-
                 self.convrect[1] += self.rect[3]
                 self.convrect[3] += self.rect[3]
             self.frame_rect = tuple(self.convrect)
