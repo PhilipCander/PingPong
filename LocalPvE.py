@@ -36,7 +36,6 @@ class Box:
 
     def draw(self):
         self.screen.blit(self.frame, (self.rect[0], self.rect[1]))
-        self.frame.fill(WHITE)
         self.frame.fill(DARKBLUE)
         for box in self.list:
             self.frame.blit(self.frame, box)
@@ -52,7 +51,6 @@ class PvE:
         self.end = False
         self.timer_color = WHITE
         self.count = 4
-        self.time = 5
         self.time = 25
         self.scoreA = 0
         self.scoreB = 0
