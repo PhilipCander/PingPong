@@ -1,45 +1,5 @@
 from settings import *
-
-from classPaddle import Paddle
-from ball import Ball
-
-
-class Box:
-    def __init__(self, surface, text, size, rect, color, times, font=None):
-        self.screen = surface
-        self.text = text
-        self.font = font
-        self.size = size
-        self.rect = rect
-        self.times = times
-        self.color = color
-        self.list = []
-        self.frame_rect = []
-        self.box_rect = [0, 0, self.rect[2], self.rect[3]]
-        self.making_boxes()
-        self.frame = pygame.Surface((self.frame_rect[2], self.frame_rect[3]))
-
-    def making_boxes(self):
-        if self.times > 1:
-            self.convrect = list(self.rect)
-            for box in range(self.times):
-                print("bla")
-                box = pygame.Rect(tuple(self.box_rect))
-                self.list.append(box)
-                self.box_rect[1] += self.rect[3]
-                self.convrect[1] += self.rect[3]
-                self.convrect[3] += self.rect[3]
-            self.frame_rect = tuple(self.convrect)
-            print(self.frame_rect)
-        else:
-            pass
-
-    def draw(self):
-        self.screen.blit(self.frame, (self.rect[0], self.rect[1]))
-        self.frame.fill(WHITE)
-        for box in self.list:
-            self.frame.blit(self.frame, box)
-            pygame.draw.rect(self.frame, self.color, box, 5)
+from classes import Paddle, Ball, Box
 
 
 class PvE:
@@ -87,9 +47,7 @@ class PvE:
             SCORE["player"] = 0
             self.score = SCORE["player"]
 
-
-        self.score_box = Box(self.screen, "test", 10, (100, 200, 400, 100), RED, 3)
-
+        self.score_box = Box(self.screen, 10, (100, 10, 400, 50), RED, 3)
 
         self.font = pygame.font.Font(None, 34)
         self.paddleA = Paddle(WHITE, 20, 100)

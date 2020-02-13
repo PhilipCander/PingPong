@@ -1,7 +1,5 @@
 from settings import *
-
-from classPaddle import Paddle
-from ball import Ball
+from classes import Paddle, Ball
 from network import Network
 
 
