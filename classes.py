@@ -7,7 +7,7 @@ class animation:
         self.screen = screen
         self.entity = entity
 
-#TODO making the
+
 class Text:
     def __init__(self, screen, text, font, size, color, x, y):
         self.screen = screen
