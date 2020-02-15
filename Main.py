@@ -3,74 +3,12 @@ from settings import *
 from LocalPvP import PvP
 from LocalPvE import PvE
 from onlinePvP import oPvP
-
+from classes import Button
 pygame.init()
 
 running = True
 
 clock = pygame.time.Clock()
-
-
-class Box:
-    def __init__(self, surface, text, size, rect, color, times, font=None):
-        self.screen = surface
-        self.text = text
-        self.font = font
-        self.size = size
-        self.rect = rect
-        self.times = times
-        self.color = color
-        self.list = []
-        self.frame_rect = []
-        self.box_rect = [0, 0, self.rect[2], self.rect[3]]
-        self.making_boxes()
-        self.frame = pygame.Surface((self.frame_rect[2], self.frame_rect[3]))
-
-    def making_boxes(self):
-        if self.times > 1:
-            self.convrect = list(self.rect)
-            for box in range(self.times):
-                print("bla")
-                box = pygame.Rect(tuple(self.box_rect))
-                self.list.append(box)
-                self.box_rect[1] += self.rect[3]
-                self.convrect[1] += self.rect[3]
-                self.convrect[3] += self.rect[3]
-            self.frame_rect = tuple(self.convrect)
-            print(self.frame_rect)
-        else:
-            pass
-
-    def draw(self):
-        self.screen.blit(self.frame, (self.rect[0], self.rect[1]))
-        self.frame.fill(WHITE)
-        for box in self.list:
-            self.frame.blit(self.frame, box)
-            pygame.draw.rect(self.frame, self.color, box, 5)
-
-
-class Button:
-    def __init__(self, text, x, y, color):
-        self.text = text
-        self.x = x
-        self.y = y
-        self.color = color
-        self.width = 150
-        self.height = 100
-
-    def draw(self, win):
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
-        font = pygame.font.SysFont("comicsans", 40)
-        text = font.render(self.text, 1, (255,255,255))
-        win.blit(text, (self.x + round(self.width/2) - round(text.get_width()/2), self.y + round(self.height/2) - round(text.get_height()/2)))
-
-    def click(self, pos):
-        x1 = pos[0]
-        y1 = pos[1]
-        if self.x <= x1 <= self.x + self.width and self.y <= y1 <= self.y + self.height:
-            return True
-        else:
-            return False
 
 
 class Game:
